@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tishka Coin 7.0 Ultimate (Fixed)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="header-pill left" onclick="openModal('modal-settings')">
+            <div class="icon-circle">⚙️</div>
+            <div style="display:flex; flex-direction:column; align-items:flex-start;">
+                <span class="league-text" id="league-disp">Bronze</span>
+            </div>
+        </div>
+        <div class="header-pill right">
+            <div class="icon-circle gold">💰</div>
+            <span id="h-coins">0</span>
+        </div>
+    </header>
+
+    <div class="content">
+        <div id="game" class="tab active">
+            <div class="game-controls">
+                <div class="control-btn" onclick="openModal('modal-wheel')">🎰<span class="control-label">Фортуна</span>
+                </div>
+                <div class="control-btn" onclick="openModal('modal-claw')">🕹<span class="control-label">Кран</span>
+                </div>
+                <div class="control-btn" onclick="openModal('modal-promo')">🔑<span class="control-label">Код</span>
+                </div>
+                <div class="control-btn" onclick="openModal('modal-settings')">⚙️<span class="control-label">Меню</span>
+                </div>
+            </div>
+
+            <div class="daily-bonus-float" id="daily-btn" onclick="claimDaily()">
+                <span class="daily-icon">🎁</span>
+                <span class="daily-text">Бонус</span>
+            </div>
+
+            <div class="circle-container">
+                <div id="pets-container"></div>
+                <div id="click-circle" onpointerdown="clickCoin(event)">
+                    <div class="tishka-face-container"
+                        style="width:100%; height:100%; display:flex; justify-content:center; align-items:center;">
+                        <svg class="cat-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M100 180C144.183 180 180 144.183 180 100C180 55.8172 144.183 20 100 20C55.8172 20 20 55.8172 20 100C20 144.183 55.8172 180 100 180Z"
+                                fill="#151515" />
+                            <path d="M30 50L10 10L60 30" fill="#151515" />
+                            <path d="M170 50L190 10L140 30" fill="#151515" />
+                            <path d="M35 45L20 20L50 35" fill="#333" />
+                            <path d="M165 45L180 20L150 35" fill="#333" />
+                            <ellipse cx="65" cy="90" rx="22" ry="28" fill="#FFD700" />
+                            <ellipse cx="135" cy="90" rx="22" ry="28" fill="#FFD700" />
+                            <ellipse cx="65" cy="90" rx="5" ry="18" fill="black" />
+                            <ellipse cx="135" cy="90" rx="5" ry="18" fill="black" />
+                            <circle cx="75" cy="80" r="5" fill="white" opacity="0.8" />
+                            <circle cx="145" cy="80" r="5" fill="white" opacity="0.8" />
+                            <path d="M92 125L108 125L100 135Z" fill="#FFB6C1" />
+                            <path d="M100 135Q85 150 75 140" stroke="#888" stroke-width="2" fill="none" />
+                            <path d="M100 135Q115 150 125 140" stroke="#888" stroke-width="2" fill="none" />
+                            <g id="skin-layer"></g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skills-row">
+                <div class="skill-btn" id="skill-1" onclick="useSkill('catnip')">🌿</div>
+                <div class="skill-btn" id="skill-2" onclick="useSkill('zoomies')">⚡️</div>
+            </div>
+        </div>
+
+        <div class="energy-float-bar">
+            <div class="energy-text-float">⚡️ <span id="energy-val">1000</span> / <span id="max-energy-val">1000</span>
+            </div>
+            <div class="energy-bar-bg">
+                <div class="energy-fill-float" id="energy-bar"></div>
+            </div>
+        </div>
+
+        <div id="shop" class="tab" style="padding-top: 150px;">
+            <h2 class="shop-header">✨ МАГАЗИН ✨</h2>
+            <div class="shop-tabs">
+                <button class="shop-tab-btn active" onclick="switchShopTab('upgrades', this)">⚡️ Улучшения</button>
+                <button class="shop-tab-btn" onclick="switchShopTab('skins', this)">👕 Одежда</button>
+            </div>
+            <div id="shop-upgrades" class="shop-section active">
+                <div class="card" onclick="openModal('modal-lootbox')">
+                    <div style="display:flex;align-items:center;">
+                        <div class="card-icon">📦</div>
+                        <div class="card-info">
+                            <h4>Лутбокс</h4>
+                            <p>Испытай удачу</p>
+                        </div>
+                    </div><button class="buy-btn">5000 💰</button>
+                </div>
+                <div class="card">
+                    <div style="display:flex;align-items:center;">
+                        <div class="card-icon">🐾</div>
+                        <div class="card-info">
+                            <h4>Питомец Муха</h4>
+                            <p>+2 монет/сек</p>
+                        </div>
+                    </div><button class="buy-btn" onclick="buyPet('fly', 10000)">10k 💰</button>
+                </div>
+                <div class="card">
+                    <div style="display:flex;align-items:center;">
+                        <div class="card-icon">👆</div>
+                        <div class="card-info">
+                            <h4>Когти</h4>
+                            <p>Сила клика</p>
+                        </div>
+                    </div><button class="buy-btn" id="btn-click" onclick="buy('click')"></button>
+                </div>
+                <div class="card">
+                    <div style="display:flex;align-items:center;">
+                        <div class="card-icon">🤖</div>
+                        <div class="card-info">
+                            <h4>Кото-Бот</h4>
+                            <p>Авто-доход</p>
+                        </div>
+                    </div>
+                    <button class="buy-btn" id="btn-auto" onclick="buy('auto')"></button>
+                </div>
+                <div class="card">
+                    <div style="display:flex;align-items:center;">
+                        <div class="card-icon">🔋</div>
+                        <div class="card-info">
+                            <h4>Батарейка</h4>
+                            <p>Макс. энергия</p>
+                        </div>
+                    </div>
+                    <button class="buy-btn" id="btn-max" onclick="buy('max')"></button>
+                </div>
+            </div>
+            <div id="shop-skins" class="shop-section">
+                <div id="skins-grid" class="shop-grid"></div>
+            </div>
+        </div>
+
+        <div id="boss-tab" class="tab" style="padding-top: 150px;">
+            <h2 class="shop-header" style="color:red; text-shadow: 0 0 10px red;">АРЕНА БОССА</h2>
+
+            <div class="boss-stats-card">
+                <div style="font-size:40px;">⚔️</div>
+                <div>
+                    <div style="color:#ccc; font-size:12px;">Твой Урон</div>
+                    <div style="font-size:24px; font-weight:bold; color:#ff5555;" id="boss-dmg-val">200</div>
+                </div>
+            </div>
+
+            <div class="boss-area-container">
+                <div class="boss-placeholder" style="width:150px; height:150px; font-size:0;">
+                    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 60 L30 10 L80 40" fill="#990000" stroke="#FF0000" stroke-width="3" />
+                        <path d="M150 60 L170 10 L120 40" fill="#990000" stroke="#FF0000" stroke-width="3" />
+                        <rect x="50" y="50" width="100" height="100" rx="20" fill="#330000" stroke="#FF0000"
+                            stroke-width="3" />
+                        <path d="M65 80 L90 90 L65 100" fill="#FFCC00" />
+                        <path d="M135 80 L110 90 L135 100" fill="#FFCC00" />
+                        <line x1="60" y1="70" x2="95" y2="85" stroke="#FF0000" stroke-width="4" />
+                        <line x1="140" y1="70" x2="105" y2="85" stroke="#FF0000" stroke-width="4" />
+                        <path d="M80 120 Q100 110 120 120 Q100 140 80 120" fill="red" />
+                        <path d="M85 120 L90 130 L95 120" fill="white" />
+                        <path d="M105 120 L110 130 L115 120" fill="white" />
+                    </svg>
+                </div>
+                <button class="boss-start-btn" onclick="startBossCapture()">ВЫЗВАТЬ БОССА</button>
+            </div>
+
+            <div class="boss-upgrade-row">
+                <div class="upgrade-info">
+                    <div style="font-weight:bold; color:#fff;">Острый Меч</div>
+                    <div style="font-size:12px; color:#ccc;">+50 к Урону по боссу</div>
+                </div>
+                <button class="buy-btn" id="btn-upgrade-sword" onclick="upgradeBossDamage()">1000 💰</button>
+            </div>
+
+            <div style="margin-top:20px; text-align:center; font-size:13px; color:#bbb;">
+                Босс имеет <span style="color:white;">20,000 HP</span>.<br>
+                Нужно убить за <span style="color:white;">15 сек</span>.
+            </div>
+        </div>
+
+        <div id="top" class="tab">
+            <h2 class="shop-header">Топ Игроков</h2>
+            <div id="leaderboard-list"></div>
+        </div>
+
+        <div id="tasks" class="tab">
+            <h2 class="shop-header">Задания</h2>
+            <div id="quests-list"></div>
+        </div>
+
+        <div id="factory" class="tab">
+            <h2 class="shop-header" style="color:#FFF;">🥛 МОЛОЧНАЯ ФАБРИКА</h2>
+
+            <div class="factory-container">
+                <div class="factory-visual">
+                    <div style="font-size:60px; margin-bottom:10px;">🏭</div>
+                    <div class="cows-field" id="cows-visual">
+                        </div>
+                </div>
+
+                <div class="factory-stats">
+                    <div class="stat-box">
+                        <div class="stat-icon">🐮</div>
+                        <div class="stat-val" id="cow-count">0</div>
+                        <div class="stat-label">Коров</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">🥛</div>
+                        <div class="stat-val" id="milk-rate">0/c</div>
+                        <div class="stat-label">Добыча</div>
+                    </div>
+                </div>
+
+                <div class="truck-section">
+                    <div class="truck-visual">
+                        <div style="font-size:40px;">🚚</div>
+                        <div class="truck-bar-container">
+                            <div class="truck-bar-fill" id="truck-fill"></div>
+                        </div>
+                    </div>
+                    <div class="truck-info">
+                        <span id="milk-storage">0</span> / <span id="milk-max">50</span> Л
+                    </div>
+                    <button class="buy-btn" id="btn-sell-milk" onclick="sellMilk()"
+                        style="background:#4ade80; color:#003300; width:100%; margin-top:10px;">ПРОДАТЬ МОЛОКО (+0
+                        💰)</button>
+                </div>
+
+                <div class="factory-controls">
+                    <div class="card" style="flex:1;">
+                        <div style="text-align:left;">
+                            <h4>Купить Корову</h4>
+                            <p>+1 Литр/сек</p>
+                        </div>
+                        <button class="buy-btn" id="btn-buy-cow" onclick="buyCow()">5000 💰</button>
+                    </div>
+                    <div class="card" style="flex:1;">
+                        <div style="text-align:left;">
+                            <h4>Грузовик</h4>
+                            <p>+50 Места</p>
+                        </div>
+                        <button class="buy-btn" id="btn-upgrade-truck" onclick="upgradeTruck()">2000 💰</button>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">
+                Фабрика работает даже когда ты оффлайн!
+            </div>
+        </div>
+
+        <div id="friends" class="tab">
+            <div style="text-align:center; margin-top:50px; opacity: 0.7;">
+                <div style="font-size: 60px;">👥</div>
+                <h2>Приглашай друзей</h2>
+                <p>Получай 10% от их дохода</p>
+                <div
+                    style="background:rgba(255,255,255,0.1); padding:10px; border-radius:10px; margin:20px; font-family:monospace;">
+                    t.me/tishkacoin_bot?start=123</div>
+                <button class="buy-btn" onclick="alert('Ссылка скопирована!')">Скопировать ссылку</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-settings" class="modal-overlay">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal('modal-settings')">✕</button>
+            <h2>Настройки</h2>
+            <p style="font-size:12px; color:#888;" id="stats-disp"></p>
+            <hr style="border-color: #333; margin: 15px 0;">
+
+            <div class="setting-row">
+                <span>Общая громкость</span>
+                <input type="range" min="0" max="100" value="100" class="volume-slider"
+                    oninput="setVolume('master', this.value)">
+            </div>
+            <div class="setting-row">
+                <span>Музыка</span>
+                <input type="range" min="0" max="100" value="50" class="volume-slider"
+                    oninput="setVolume('music', this.value)">
+            </div>
+            <div class="setting-row">
+                <span>Звуки (SFX)</span>
+                <input type="range" min="0" max="100" value="100" class="volume-slider"
+                    oninput="setVolume('sfx', this.value)">
+            </div>
+
+            <hr style="border-color: #333; margin: 15px 0;">
+
+            <button class="buy-btn" style="background:#333; color:#fff; width:100%; margin-bottom:10px; padding:15px;"
+                onclick="toggleParticles()">Частицы: <span id="particles-state">ВКЛ</span></button>
+
+            <button class="buy-btn" style="background:var(--danger); color:#fff; width:100%; padding:15px;"
+                onclick="doPrestige()" id="prestige-btn">РЕБИТ (Сброс за x2)</button>
+            <p style="font-size:10px; color:#666; margin-top:5px;">Требуется 1М монет</p>
+            <div style="margin-top:20px; font-size:10px; color:#444; border-top:1px solid #333; padding-top:10px;">
+                <div>Твой ID (нажми чтобы скопировать):</div>
+                <div id="player-id" onclick="copyId()"
+                    style="background:#111; padding:5px; border-radius:4px; margin:5px 0; color:#fff; font-family:monospace; cursor:pointer;">
+                    LOADING...</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-daily" class="modal-overlay">
+        <div class="modal" style="max-width: 500px;">
+            <button class="close-btn" onclick="closeModal('modal-daily')">✕</button>
+            <h2>Ежедневные Награды</h2>
+            <p>Заходи каждый день, чтобы не потерять прогресс!</p>
+            <div class="daily-grid" id="daily-grid">
+                </div>
+            <button class="buy-btn" id="claim-daily-btn" onclick="claimDailyReward()"
+                style="width:100%; margin-top:15px; font-size:18px;">ЗАБРАТЬ</button>
+        </div>
+    </div>
+
+    <div id="modal-wheel" class="modal-overlay">
+        <div class="modal" style="background:#220a22; border-color:#ff0055;">
+            <button class="close-btn" onclick="closeModal('modal-wheel')">✕</button>
+            <h2 style="color:#ff0055;">Колесо Фортуны</h2>
+            <p id="spin-cost-text">Раз в день бесплатно!</p>
+            <div style="position:relative; margin:20px 0;">
+                <div class="wheel-arrow"></div>
+                <div class="wheel-container">
+                    <div class="css-wheel" id="wheel"></div>
+                </div>
+            </div>
+            <button class="buy-btn" id="spin-btn" onclick="spinWheel()"
+                style="background:linear-gradient(45deg, #ff0055, #ffcc00); width:100%; font-size:18px;">КРУТИТЬ</button>
+        </div>
+    </div>
+
+    <div id="modal-claw" class="modal-overlay">
+        <div class="modal" style="background:#222; border-color:#00ffcc;">
+            <button class="close-btn" onclick="closeModal('modal-claw')">✕</button>
+            <h2 style="color:#00ffcc;">Кран-машина</h2>
+            <div class="claw-machine-container">
+                <div class="claw-rail"></div>
+                <div id="claw-arm" class="claw-arm claw-moving">
+                    <div class="claw-hand"></div>
+                </div>
+                <div class="claw-prize-area" id="claw-prizes"></div>
+            </div>
+            <p class="claw-desc">Цена игры: 5000 монет</p>
+            <button class="buy-btn" id="claw-btn" onclick="dropClaw()"
+                style="width:100%; background:#00ffcc; color:#000;">ХВАТЬ!</button>
+        </div>
+    </div>
+
+    <div id="modal-promo" class="modal-overlay">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal('modal-promo')">✕</button>
+            <h2>Промокод</h2>
+            <input type="text" id="promo-input" class="promo-input" placeholder="ВВЕДИ СЮДА">
+            <button class="buy-btn" onclick="activatePromo()" style="width:100%; font-size:16px;">АКТИВИРОВАТЬ</button>
+        </div>
+    </div>
+
+    <div id="transition-overlay"
+        style="position:fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:9999; pointer-events:none; opacity:0; transition:opacity 0.5s;">
+    </div>
+
+    <div id="modal-boss" class="modal-overlay">
+        <div class="modal" style="background:#200; border-color:red;">
+            <h2 style="color:red; font-size:30px;">БОСС</h2>
+            <div style="width:120px; height:120px; margin:0 auto;">
+                <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 60 L30 10 L80 40" fill="#990000" stroke="#FF0000" stroke-width="3" />
+                    <path d="M150 60 L170 10 L120 40" fill="#990000" stroke="#FF0000" stroke-width="3" />
+                    <rect x="50" y="50" width="100" height="100" rx="20" fill="#330000" stroke="#FF0000"
+                        stroke-width="3" />
+                    <path d="M65 80 L90 90 L65 100" fill="#FFCC00" />
+                    <path d="M135 80 L110 90 L135 100" fill="#FFCC00" />
+                    <line x1="60" y1="70" x2="95" y2="85" stroke="#FF0000" stroke-width="4" />
+                    <line x1="140" y1="70" x2="105" y2="85" stroke="#FF0000" stroke-width="4" />
+                    <path d="M80 120 Q100 110 120 120 Q100 140 80 120" fill="red" />
+                    <path d="M85 120 L90 130 L95 120" fill="white" />
+                    <path d="M105 120 L110 130 L115 120" fill="white" />
+                </svg>
+            </div>
+            <div
+                style="width:100%; height:20px; background:#500; border:2px solid red; border-radius:10px; margin:10px 0; overflow:hidden;">
+                <div id="boss-hp" style="width:100%; height:100%; background:red; transition:width 0.05s linear;">
+                </div>
+            </div>
+            <div id="boss-hp-text" style="color:white; font-weight:bold; margin-bottom:10px;">20000 / 20000</div>
+            <div id="boss-timer" style="font-size:30px; font-weight:bold; color:white;">30.00</div>
+            <button class="buy-btn" onpointerdown="hitBoss(event)"
+                style="width:100%; background:red; margin-top:20px; height:60px; font-size:24px; box-shadow:0 0 20px red; touch-action: manipulation;">АТАКА!</button>
+        </div>
+    </div>
+
+    <div id="modal-purchase" class="modal-overlay">
+        <div class="modal purchase-modal">
+            <div class="purchase-icon">✅</div>
+            <h2 class="purchase-title">Успешно!</h2>
+            <p id="purchase-text">Улучшение куплено</p>
+            <button class="buy-btn purchase-continue" onclick="closeModal('modal-purchase')"
+                style="width:100%; margin-top:20px;">Продолжить</button>
+        </div>
+    </div>
+
+    <div id="modal-lootbox" class="modal-overlay">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal('modal-lootbox')">✕</button>
+            <h2>Коробка удачи</h2>
+            <div style="font-size:80px; margin:20px;">📦</div>
+            <p>Цена: 5000 монет</p>
+            <button class="buy-btn" onclick="openLootbox()" style="width:100%; font-size:18px;">ОТКРЫТЬ</button>
+        </div>
+    </div>
+
+    <div id="modal-reward" class="modal-overlay">
+        <div class="modal"
+            style="background: linear-gradient(135deg, #1a1a2e, #2a0e2a); border-color: #ffd700; transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+            <div style="font-size: 80px; animation: bounce 1s infinite alternate;">💎</div>
+            <h2 style="color: #ffd700; text-shadow: 0 0 10px #ffd700;">ПОЗДРАВЛЯЮ!</h2>
+            <p id="reward-source" style="color: #aaa; margin-bottom: 5px;">Ты получил награду</p>
+            <h1 style="color: #fff; font-size: 40px; margin: 10px 0; text-shadow: 0 4px 0 #000;">+<span
+                    id="reward-amount">0</span> 💰</h1>
+            <button class="buy-btn" onclick="closeModal('modal-reward')"
+                style="width: 100%; margin-top: 20px; font-size: 18px; background: #ffd700; color: #000; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);">КРУТО!</button>
+        </div>
+    </div>
+
+    <div id="modal-offline" class="modal-overlay">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal('modal-offline')">✕</button>
+            <h2>С возвращением!</h2>
+            <p>Пока ты спал, Тишка заработал:</p>
+            <h1 style="color:var(--primary); font-size:40px; margin:10px 0;">+<span id="offline-amount">0</span>
+            </h1>
+            <button class="buy-btn" onclick="closeModal('modal-offline')" style="width:100%;">ЗАБРАТЬ</button>
+        </div>
+    </div>
+
+    <nav>
+        <button class="nav-item active" onclick="switchTab('game', this)"><span>🎮</span>
+            <div>Игра</div>
+        </button>
+        <button class="nav-item" onclick="switchTab('shop', this)"><span>🛒</span>
+            <div>Магазин</div>
+        </button>
+        <button class="nav-item" onclick="switchTab('boss-tab', this)"><span>⚔️</span>
+            <div>Босс</div>
+        </button>
+        <button class="nav-item" onclick="switchTab('factory', this)"><span>🏭</span>
+            <div>Фабрика</div>
+        </button>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        // --- НАСТРОЙКИ SUPABASE ---
+        const SUPABASE_URL = 'https://caqoztwjaomveihkvgui.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_yhKSfdWH_yU9EdaaV9j5fw_zCV21HTT'; 
+
+        // Инициализация
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        window.supabase = supabase;
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>
